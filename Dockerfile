@@ -1,4 +1,4 @@
-FROM c-dev-env
+FROM inginform/c-dev-env:latest
 MAINTAINER Jan Suchotzki <jan@inginform.de>
 
 # Installiere notwendige Pakete zum kompilieren von brickd
