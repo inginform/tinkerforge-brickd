@@ -30,4 +30,4 @@ WORKDIR /usr/src/brickdaemon_${BRICKD_VERSION}/src
 EXPOSE 4223
 
 # Brick Daemon starten
-CMD ["/usr/src/brickdaemon_${BRICKD_VERSION}/src/brickd/brickd"]
+CMD ["brickd/brickd"]
