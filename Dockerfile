@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Quellcode für den Brick Daemon holen und kompilieren
+# TODO: Überprüfen der Checksumme wäre gut. Es gibt aber scheinbar keine.
 RUN curl -SL "https://github.com/Tinkerforge/brickd/archive/v${BRICKD_VERSION}.tar.gz" -o brickd.tar.gz \
 	&& curl -SL "https://github.com/Tinkerforge/daemonlib/archive/brickd-${BRICKD_VERSION}.tar.gz" -o daemonlib.tar.gz \
 	&& mkdir -p /usr/src/brickdaemon \
@@ -23,7 +24,7 @@ RUN curl -SL "https://github.com/Tinkerforge/brickd/archive/v${BRICKD_VERSION}.t
 	&& make \
 	&& make install
 
-# Port com Brick Daemon für andere Container bekannt machen
+# Port vom Brick Daemon für andere Container bekannt machen
 EXPOSE 4223
 
 # Brick Daemon starten
