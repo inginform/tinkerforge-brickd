@@ -11,19 +11,29 @@ Neben dem Quellcode und dem bereits kompilierten Brick Daemon sind auch die wich
 ##Anwendung
 
 Wird ein Container ganz normal mit folgendem Befehl gestartet, läuft in ihm der Brick Daemon und kann über Port 4223 von anderen Tinkerforge-Anwendungen (z.B. Bricker Viewer oder Languagebindings) angesprochen werden:
-`docker run -d --name brickd inginform/tinkerforge-brickd`
+`docker run -d -v /dev/bus/usb:/dev/bus/usb --privileged --name brickd inginform/tinkerforge-brickd`
 
 Über den Parameter `--name brickd` wird der im Hintergrund laufende Container mit dem namen `brickd` versehen. Somit kann er einfacher von anderen Containern verlinkt werden.
 
+Die Parameter `--privileged` und `-v /dev/bus/usb:/dev/bus/usb` sind notwendig damit Dein Container auf die USB Schnittstellen zugreifen kann. Mit dem ersten Parameter gewährst Du dem Container einen ziemlich umfangreichen Zugriff auf Deinen Computer. Überlege also bitte immer ob Du dem Image trauen kannst welches Du mit diesem Parameter ausführen willst. Der zweite Parameter gibt Deinem Container Zugriff auf alle USB Geräte.
+
 Wenn Du am Brick Daemon entwickeln möchtest, kannst Du den Container so starten:
-`docker run -it inginform/tinkerforge-brickd /bin/bash`
+`docker run -it -v /dev/bus/usb:/dev/bus/usb --privileged inginform/tinkerforge-brickd /bin/bash`
 
 Bedenke bitte, dass so Änderungen die Du im Container machst verloren gehen, wenn der Container gestoppt und gelöscht wird. Du könntest direkt aus dem Container Änderungen die Du machst in ein Git-Repository schicken.
 
 Wenn Du bereits eine andere Version des Quellcodes auf Deinem Rechner hast, dann kannst Du auch diese in den Container mounten. Dazu startest Du den Container mit folgendem Befehl aus dem Verzeichnis in dem sich der Quellcode befindet:
-`docker run -it -v $(pwd):/usr/src/brickdaemon -w /usr/src/brickdaemon inginform/tinkerforge-brickd /bin/bash`
+`docker run -it -v $(pwd):/usr/src/brickdaemon -w /usr/src/brickdaemon -v /dev/bus/usb:/dev/bus/usb --privileged inginform/tinkerforge-brickd /bin/bash`
 
 Beachte bitte, dass Du nicht nur den Quellcode vom brickd brauchst, sondern auch die daemonlib. Eine genaue Beschreibung wie Du den Quellcode bekommst, kannst Du bei [Tinkerforge finden](https://github.com/Tinkerforge/brickd/).
+
+###Hinweis zu Boot2Docker
+
+Wenn Du Boot2Docker verwendest, dies ist der Fall wenn Du Windows oder Mac OS X hast, dann musst Du die USB-Schnittstellen von Deinem Rechner in der Virtuellen Maschine von Boot2Docker bereitstellen. Dies solltest Du unbedingt über die grafische Benutzeroberfläche von Virtual Box machen!
+
+Als erstes verbindest Du einen Master Brick per USB-Kabel mit Deinem Computer. Starte dann Virtual Box (ein Programm welches mit Boot2Docker installiert wurde) und wähle die `boot2docker-vm` aus. Dann öffnest Du die Einstellungen dieser Virtuellen Maschine. Unter Schnittstellen findest Du auch die Möglichkeit USB zu konfigurieren. Dort musst Du einen USB Filter hinzufügen in dem Du auf den blauen Stecker mit dem grünen Plus klickst. Nun solltest Du den Master Brick von Tinkerforge auswählen können. Abschließend mit `Ok` bestätigen.
+
+Nun sollte Boot2Docker und somit auch Docker zugriff auf den Master Brick haben.
 
 ##Wartung
 
